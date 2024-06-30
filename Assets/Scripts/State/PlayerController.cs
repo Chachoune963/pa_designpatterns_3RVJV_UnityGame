@@ -1,6 +1,5 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class PlayerState
 {
@@ -15,18 +14,12 @@ public abstract class PlayerState
     public abstract void OnHit(AttackInfo attackInfo);
 }
 
-public class PlayerController : MonoBehaviour, IDamageable
+public class PlayerController : MonoBehaviour, Subscriber<int>, IDamageable
 {
-    public int CurrentHealth
-    {
-        get => health;
-        set
-        {
-            health = value;
-            if (health <= 0)
-                Die();
-        }
-    }
+    public int MaxHealth
+        => maxHealth;
+    public ObservableValue<int> CurrentHealth
+        => health;
 
     public float MovementSpeed => movementSpeed;
 
@@ -35,14 +28,18 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D body;
 
-    [SerializeField] private int health;
+    [SerializeField] private int maxHealth;
     [SerializeField] private float movementSpeed;
+
+    private ObservableValue<int> health = new ObservableValue<int>();
 
     private PlayerState state;
 
 
     void Start()
     {
+        health.Value = maxHealth;
+        health.Subscribe(this);
         state = new NeutralPlayerState(this);
     }
 
@@ -66,5 +63,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    public void Notify(int value)
+    {
+        if (value <= 0)
+            Die();
     }
 }

@@ -17,7 +17,7 @@ public class HitstunPlayerState : PlayerState
 
     public override void OnHit(AttackInfo attackInfo)
     {
-        player.CurrentHealth -= attackInfo.Strength;
+        player.CurrentHealth.Value -= attackInfo.Strength;
         stunFrames = attackInfo.HitStun;
     }
 }

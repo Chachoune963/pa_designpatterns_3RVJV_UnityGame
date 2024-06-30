@@ -282,5 +282,5 @@ MonoBehaviour:
   CurrentVelocity: {x: 0, y: 0}
   animator: {fileID: 2460309253522396835}
   body: {fileID: 7758474925175650889}
-  health: 200
+  maxHealth: 10
   movementSpeed: 5

@@ -15,7 +15,7 @@ public class NeutralPlayerState : PlayerState
 
     public override void OnHit(AttackInfo attackInfo)
     {
-        player.CurrentHealth -= attackInfo.Strength;
+        player.CurrentHealth.Value -= attackInfo.Strength;
         player.CurrentVelocity = attackInfo.ImpactDirection;
         player.ChangeState(new HitstunPlayerState(player, attackInfo.HitStun));
     }
